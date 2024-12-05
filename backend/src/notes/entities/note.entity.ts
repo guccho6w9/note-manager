@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { Tag } from './tag.entity';
 
 @Entity()
 export class Note {
@@ -13,4 +14,7 @@ export class Note {
 
     @Column({ default: false })
     archived: boolean;
+
+    @ManyToMany(() => Tag, tag => tag.notes, { eager: true })
+    tags: Tag[];
 }

@@ -26,4 +26,9 @@ export class NotesController {
     remove(@Param('id') id: string) {
         return this.notesService.delete(+id);
     }
+
+    @Patch(':id/archive')
+    toggleArchive(@Param('id') id: string): Promise<Note> {
+    return this.notesService.toggleArchive(+id);
+  }
 }

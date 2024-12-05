@@ -28,8 +28,16 @@ export class NotesService {
     return this.notesRepo.save(note);
   }
 
-  async findAll(active: boolean) {
-    return this.notesRepo.find({ where: { archived: !active } });
+  async findAll(active: boolean, tagId?: number) {
+    const query = this.notesRepo.createQueryBuilder('note')
+      .leftJoinAndSelect('note.tags', 'tag') // Carga las relaciones de tags
+      .where('note.archived = :archived', { archived: !active });
+  
+    if (tagId) {
+      query.andWhere('tag.id = :tagId', { tagId }); // Filtra por tagId si se proporciona
+    }
+  
+    return query.getMany(); // Ejecuta la consulta y devuelve las notas
   }
 
   async update(id: number, updateData: Partial<Note>) {

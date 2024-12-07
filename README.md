@@ -1,6 +1,6 @@
 # Notes manager Project with Node.js, React, and Tailwind CSS
 
-This is a project for a note manager that uses **Next.js**, **React**, **Tailwind CSS**, and **TypeScript** to build an interactive single page application website. The site includes functionalities like a creating a note, categories, and editing them.
+This is a project for a note manager that uses **Node.js**, **React**, **Tailwind CSS**, and **TypeScript** to build an interactive single page application website. The site includes functionalities like a creating a note, categories, and editing them.
 
 ## Requirements
 

@@ -8,6 +8,7 @@ import { NotesModule } from './notes/notes.module';
       type: 'postgres',
       host: 'localhost',
       port: 5432,
+      url: process.env.DATABASE_URL,
       username: 'postgres',
       password: 'agus2k15',
       database: 'notas_db',

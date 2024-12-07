@@ -24,17 +24,17 @@ cd this-repository
 
 ### Dependencies for frontend
 ```bash
-1)
+
 cd Quiroga-e96e60\frontend
-2)
+
 npm install
 ```
 
 ### Dependencies for backend
 ```bash
-1)
+
 cd Quiroga-e96e60\backend
-2)
+
 npm install
 ```
 

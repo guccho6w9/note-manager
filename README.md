@@ -1,14 +1,46 @@
-# Notes manager Project with Node.js, React, and Tailwind CSS
+# Notes manager Project with Nest.js, React, and Tailwind CSS
 
-This is a project for a note manager that uses **Node.js**, **React**, **Tailwind CSS**, and **TypeScript** to build an interactive single page application website. The site includes functionalities like a creating a note, categories, and editing them.
+This is a project for a note manager that uses **Nest.js**, **React**, **Tailwind CSS**, and **TypeScript** to build an interactive single page application website. The site includes functionalities like a creating a note, categories, and editing them.
 
 ## Requirements
 
 Before installing the project, make sure you have the following tools installed on your machine:
 
-- **Node.js** (version >= 16.x) - [Download Node.js](https://nodejs.org/)
+- **Nest.js**  - [Download Nest.js](https://nodejs.org/en)
 - **npm** (Node.js package manager) - Usually installed along with Node.js.
+- **PostgreSQL**
 - **Vite** (optional, if you want to use Vite instead of `create-next-app`) - [Install Vite](https://vitejs.dev/)
+
+## Setting Up PostgreSQL for Notes App
+
+Follow these steps to set up PostgreSQL for your Notes app.
+
+### 1. Install PostgreSQL
+
+If you don't have PostgreSQL installed, you can install it on your Linux machine by running:
+
+```bash
+# On Ubuntu
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+
+# On Fedora
+sudo dnf install postgresql-server postgresql-contrib
+
+# On MacOS (using Homebrew)
+brew install postgresql
+```
+If you're on Windows, you can download the installer from: https://www.postgresql.org/download/windows/
+### 2. Set up the database
+Make sure to create a database for the project in postgresql, then create a .env file in the root of your project with the info of your postgresql:
+```bash
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USERNAME=postgres or the name of your user
+DATABASE_PASSWORD=your_password
+DATABASE_NAME=notas_db or the name of your db with permits
+
+```
 
 ## Installation
 

@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { deleteNote, toggleArchiveNote, Note } from '../utils/api';
+// notelist.tsx
+
+import React, { useState } from "react";
+import { deleteNote, toggleArchiveNote, Note } from "../utils/api";
 import "../globals.css";
 
 interface NotesListProps {
@@ -9,7 +11,12 @@ interface NotesListProps {
   active: boolean; // Indica si estamos mostrando notas activas o archivadas
 }
 
-const NotesList: React.FC<NotesListProps> = ({ notes, onEdit, onDelete, active }) => {
+const NotesList: React.FC<NotesListProps> = ({
+  notes,
+  onEdit,
+  onDelete,
+  active,
+}) => {
   const [noteColors, setNoteColors] = useState<{ [key: number]: string }>({});
   const [openMenu, setOpenMenu] = useState<number | null>(null);
 
@@ -18,16 +25,16 @@ const NotesList: React.FC<NotesListProps> = ({ notes, onEdit, onDelete, active }
       return noteColors[id];
     }
     const colors = [
-      'bg-blue-200',
-      'bg-yellow-200',
-      'bg-green-200',
-      'bg-pink-200',
-      'bg-purple-200',
-      'bg-teal-200',
-      'bg-orange-200',
-      'bg-lime-200',
-      'bg-rose-200',
-      'bg-violet-200',
+      "bg-blue-200",
+      "bg-yellow-200",
+      "bg-green-200",
+      "bg-pink-200",
+      "bg-purple-200",
+      "bg-teal-200",
+      "bg-orange-200",
+      "bg-lime-200",
+      "bg-rose-200",
+      "bg-violet-200",
     ];
     const color = colors[Math.floor(Math.random() * colors.length)];
     setNoteColors((prevColors) => ({ ...prevColors, [id]: color }));
@@ -54,23 +61,29 @@ const NotesList: React.FC<NotesListProps> = ({ notes, onEdit, onDelete, active }
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl text-lime-400 font-bold mb-4">
-        {active ? 'Notas Activas' : 'Notas Archivadas'}
+    <div className="p-4 flex flex-col w-full">
+      <h1 className="text-2xl text-lime-400 font-bold mb-8">
+        {active ? "Active Notes" : "Archived Notes"}
       </h1>
-      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="mb-20 grid gap-7 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 flex-grow justify-items-center">
         {notes.length === 0 && (
           <p className="text-gray-500 text-center col-span-full">
-            No hay notas {active ? 'activas' : 'archivadas'}.
+            No {active ? "active" : "archived"} notes.
           </p>
         )}
         {notes.map((note) => (
           <div
             key={note.id}
-            className={`${getRandomColor(note.id)} relative border p-6 h-[250px] min-h-[250px] max-h-[250px] rounded shadow-md flex flex-col`}
+            className={`h-[250px] min-h-[250px] max-h-[250px] w-[290px] ${getRandomColor(
+              note.id
+            )} relative border p-6 rounded shadow-md flex flex-col`}
           >
             <h3 className="text-lg text-black font-bold mb-2">{note.title}</h3>
-            <p className="text-gray-700 font-semibold flex-grow overflow-hidden text-ellipsis">{note.content}</p>
+            <p className="text-gray-700 font-semibold flex-grow overflow-hidden text-ellipsis">
+              {note.content || (
+                <span className="invisible">Invisible Text</span>
+              )}
+            </p>
             <div className="absolute bottom-2 left-2 text-xs text-gray-800 opacity-75 space-x-2">
               {note.tags.map((tag) => (
                 <span
@@ -86,7 +99,7 @@ const NotesList: React.FC<NotesListProps> = ({ notes, onEdit, onDelete, active }
                 onClick={() => handleArchiveToggle(note.id)}
                 className="bg-sky-500 text-white px-3 py-1 rounded-full hover:bg-sky-700"
               >
-                {active ? 'Archivar' : 'Desarchivar'}
+                {active ? "Archive" : "Unarchive"}
               </button>
               <div className="relative">
                 <button
@@ -101,13 +114,13 @@ const NotesList: React.FC<NotesListProps> = ({ notes, onEdit, onDelete, active }
                       onClick={() => onEdit(note)}
                       className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
                     >
-                      Editar
+                      Edit
                     </button>
                     <button
                       onClick={() => handleDelete(note.id)}
                       className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
                     >
-                      Eliminar
+                      Delete
                     </button>
                   </div>
                 )}

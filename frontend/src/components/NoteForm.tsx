@@ -3,10 +3,10 @@ import { createNote, updateNote, getTags, createTag, Tag } from '../utils/api';
 import "../globals.css";
 
 interface NoteFormProps {
-  note?: { id: number; title: string; content: string; tagIds: number[] }; // Nota opcional para edición
+  note?: { id: number; title: string; content: string; tagIds: number[] };
   onSubmit: () => void;
   refreshTags: () => void;
-  onClose: () => void; // Callback para cerrar el formulario
+  onClose: () => void;
 }
 
 const NoteForm: React.FC<NoteFormProps> = ({ note, onSubmit, refreshTags, onClose }) => {
@@ -16,12 +16,12 @@ const NoteForm: React.FC<NoteFormProps> = ({ note, onSubmit, refreshTags, onClos
   const [tags, setTags] = useState<Tag[]>([]);
   const [newTagName, setNewTagName] = useState('');
 
-  // Actualizar el estado del formulario cuando la nota cambie
+  // Actualizar estado cuando la nota cambie
   useEffect(() => {
     if (note) {
       setTitle(note.title);
       setContent(note.content);
-      setTagIds(note.tagIds || []); // Cargar los tags asociados
+      setTagIds(note.tagIds || []);
     } else {
       setTitle('');
       setContent('');
@@ -29,7 +29,7 @@ const NoteForm: React.FC<NoteFormProps> = ({ note, onSubmit, refreshTags, onClos
     }
   }, [note]);
 
-  // Cargar los tags disponibles al montar el componente
+  // Cargar tags disponibles al montar el componente
   useEffect(() => {
     const fetchTags = async () => {
       const data = await getTags();
@@ -41,53 +41,57 @@ const NoteForm: React.FC<NoteFormProps> = ({ note, onSubmit, refreshTags, onClos
   const handleSubmit = async () => {
     const noteData = { title, content, tagIds };
     if (note?.id) {
-      await updateNote(note.id, noteData); // Actualizar nota existente
+      await updateNote(note.id, noteData);
     } else {
-      await createNote(noteData); // Crear nueva nota
+      await createNote(noteData);
     }
     onSubmit();
-    onClose(); // Cerrar formulario al completar
+    onClose();
   };
 
   const handleAddTag = (id: number) => {
     if (!tagIds.includes(id)) {
-      setTagIds((prev) => [...prev, id]); // Agregar tagId al array
+      setTagIds([...tagIds, id]);
     }
   };
 
   const handleRemoveTag = (id: number) => {
-    setTagIds((prev) => prev.filter((tagId) => tagId !== id)); // Eliminar tagId
+    setTagIds(tagIds.filter((tagId) => tagId !== id));
   };
 
   const handleCreateTag = async () => {
-    if (!newTagName) return;
-    const newTag = await createTag(newTagName);
+    if (!newTagName.trim()) return;
+    const newTag = await createTag(newTagName.trim());
     setTags((prev) => [...prev, newTag]);
-    setNewTagName('');
     refreshTags();
+    setNewTagName('');
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white w-full max-w-lg p-6 rounded-md shadow-lg space-y-6">
-        <h2 className="text-xl font-bold">
-          {note ? 'Editar Nota' : 'Agregar Nota'}
-        </h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+      <div className="bg-gray-800 w-full max-w-lg p-6 rounded-md shadow-lg space-y-6 text-white">
+        <h2 className="text-xl font-bold">{note ? 'Edit Note' : 'Add Note'}</h2>
+
+        {/* Título */}
         <input
           type="text"
-          placeholder="Título"
+          placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-3 border rounded-md"
+          className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none"
         />
+
+        {/* Contenido */}
         <textarea
-          placeholder="Contenido"
+          placeholder="Content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="w-full p-3 border rounded-md"
+          className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none"
         />
+
+        {/* Tags */}
         <div>
-          <label className="block text-gray-700 font-bold mb-2">Tags seleccionados:</label>
+          <label className="block text-sm font-medium mb-2">Selected tags:</label>
           <div className="flex flex-wrap gap-2 mb-2">
             {tagIds.map((tagId) => {
               const tag = tags.find((t) => t.id === tagId);
@@ -102,46 +106,54 @@ const NoteForm: React.FC<NoteFormProps> = ({ note, onSubmit, refreshTags, onClos
               );
             })}
           </div>
-          <select
-            onChange={(e) => handleAddTag(parseInt(e.target.value))}
-            className="w-full p-3 border rounded-md"
-            value=""
-          >
-            <option value="" disabled>
-              Agregar Tag
-            </option>
-            {tags.map((tag) => (
-              <option key={tag.id} value={tag.id}>
-                {tag.name}
+
+          <div className="flex space-x-4 mb-4">
+            <select
+              onChange={(e) => handleAddTag(parseInt(e.target.value))}
+              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none"
+              value=""
+            >
+              <option value="" disabled>
+                Add Category
               </option>
-            ))}
-          </select>
+              {tags.map((tag) => (
+                <option key={tag.id} value={tag.id}>
+                  {tag.name}
+                </option>
+              ))}
+            </select>
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="text"
+                placeholder="New category name"
+                value={newTagName}
+                onChange={(e) => setNewTagName(e.target.value)}
+                className="p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none"
+              />
+              <button
+                onClick={handleCreateTag}
+                className="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-700 focus:outline-none"
+              >
+                Create
+              </button>
+            </div>
+          </div>
         </div>
-        <input
-          type="text"
-          placeholder="Nuevo Tag"
-          value={newTagName}
-          onChange={(e) => setNewTagName(e.target.value)}
-          className="w-full p-3 border rounded-md"
-        />
-        <button
-          onClick={handleCreateTag}
-          className="bg-green-500 text-white px-4 py-2 rounded-md"
-        >
-          Crear Tag
-        </button>
+
+        {/* Botones */}
         <div className="flex justify-end space-x-4">
           <button
             onClick={handleSubmit}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            className="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-700 focus:outline-none"
           >
-            Guardar
+            Save
           </button>
           <button
             onClick={onClose}
-            className="bg-red-500 text-white px-4 py-2 rounded-md"
+            className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 focus:outline-none"
           >
-            Cerrar
+            Close
           </button>
         </div>
       </div>

@@ -7,6 +7,7 @@ export interface Note {
   archived: boolean;
   tags: Tag[];
   tagIds: number[];
+  
 }
 
 export interface Tag {
@@ -51,4 +52,8 @@ export const getTags = async (): Promise<Tag[]> => {
 export const createTag = async (name: string): Promise<Tag> => {
   const response = await apiClient.post('/tags', { name });
   return response.data;
+};
+
+export const deleteTag = async (id: number): Promise<void> => {
+  await apiClient.delete(`/tags/${id}`);
 };

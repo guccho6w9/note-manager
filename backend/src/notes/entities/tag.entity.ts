@@ -9,6 +9,6 @@ export class Tag {
   @Column()
   name: string;
 
-  @ManyToMany(() => Note, note => note.tags)
+  @ManyToMany(() => Note, note => note.tags, { cascade: true, onDelete: "CASCADE" })
   notes: Note[];
 }

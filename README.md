@@ -1,4 +1,4 @@
-# Restaurant Project with Next.js, React, and Tailwind CSS
+# Notes manager Project with Next.js, React, and Tailwind CSS
 
 This is a project for a note manager that uses **Next.js**, **React**, **Tailwind CSS**, and **TypeScript** to build an interactive single page application website. The site includes functionalities like a creating a note, categories, and editing them.
 
@@ -19,5 +19,5 @@ First, clone this repository to your local machine:
 ```bash
 git clone https://github.com/ensolvers-github-challenges/Quiroga-e96e60.git
 cd this-repository
-
+```
 ### Install Dependencies

@@ -40,11 +40,34 @@ export class NotesService {
     return query.getMany(); // Ejecuta la consulta y devuelve las notas
   }
 
-  async update(id: number, updateData: Partial<Note>) {
-    await this.notesRepo.update(id, updateData);
-    return this.notesRepo.findOne({ where: { id } });
+  async update(id: number, updateData: Partial<Note>): Promise<Note> {
+    const { title, content, tags } = updateData;
+  
+    const note = await this.notesRepo.findOne({ where: { id }, relations: ['tags'] });
+  
+    if (!note) {
+      throw new NotFoundException(`Note with ID ${id} not found`);
+    }
+  
+    // Actualizamos el título y el contenido
+    note.title = title || note.title;
+    note.content = content || note.content;
+  
+    // Si se proporcionan tags, actualizamos la relación de tags
+    if (tags) {
+      // Buscar los tags por sus IDs
+      const existingTags = await this.tagsRepo.find({
+        where: { id: In(tags.map(tag => tag.id)) },
+      });
+  
+      // Actualizamos la lista de tags en la nota
+      note.tags = existingTags;
+    }
+  
+    // Guardamos la nota actualizada
+    return this.notesRepo.save(note);
   }
-
+  
   async delete(id: number) {
     return this.notesRepo.delete(id);
   }
